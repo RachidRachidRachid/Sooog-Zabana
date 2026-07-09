@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Profil - SOOG ZABANA</title>
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dark.css">
+    <link rel="stylesheet" href="css/animation.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <style>
+        .profile-container-layout {
+            margin: 40px auto 80px;
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 32px;
+        }
+        .profile-sidebar {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px 16px;
+            height: fit-content;
+            box-shadow: var(--shadow-sm);
+        }
+        .profile-menu-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .profile-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .profile-menu-item:hover, .profile-menu-item.active {
+            color: var(--primary);
+            background: var(--primary-soft);
+        }
+        .profile-content-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow-sm);
+        }
+        /* Mobile dashboard rules */
+        @media(max-width: 900px) {
+            .profile-container-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+        /* Chat box specifics styling */
+        .chat-app-box {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            height: 500px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            background: var(--surface);
+        }
+        .chat-contacts-col {
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            background: var(--bg);
+        }
+        .chat-contact-row {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .chat-contact-row.active {
+            background: var(--surface);
+            border-left: 4px solid var(--primary);
+        }
+        .chat-viewport-col {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .chat-history-viewport {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: rgba(15,23,42,0.01);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .chat-bubble {
+            max-width: 70%;
+            padding: 10px 16px;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+        }
+        .chat-bubble.sent {
+            background: var(--primary);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+        .chat-bubble.received {
+            background: var(--bg);
+            color: var(--text);
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+            border: 1px solid var(--border);
+        }
+        .chat-input-row {
+            padding: 12px 16px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 12px;
+            background: var(--surface);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section (Dynamic) -->
+    <header></header>
+
+    <main class="container profile-container-layout">
+        <!-- Dashboard Sidebar navigation -->
+        <aside class="profile-sidebar">
+            <div style="text-align:center; padding:16px 0 24px; border-bottom:1px solid var(--border); margin-bottom:20px;">
+                <div class="profile-avatar" id="sidebar-user-avatar" style="width:64px; height:64px; margin:0 auto 12px; border-radius:50%; background:var(--secondary); color:white; display:flex; align-items:center; justify-content:center; font-size:1.8rem; font-weight:800;">U</div>
+                <h3 id="sidebar-user-name" style="font-size:1.05rem; font-weight:700;">Chargement...</h3>
+                <span id="sidebar-user-email" style="font-size:0.75rem; color:var(--text-muted);">...</span>
+            </div>
+            
+            <ul class="profile-menu-list">
+                <li class="profile-menu-item active" data-tab="account">
+                    <span class="material-icons">manage_accounts</span> Mon Compte
+                </li>
+                <li class="profile-menu-item" data-tab="ads">
+                    <span class="material-icons">collections</span> Mes Annonces
+                </li>
+                <li class="profile-menu-item" data-tab="chat">
+                    <span class="material-icons">chat</span> Messagerie
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Dynamic profile window section changes -->
+        <section class="profile-content-box animate-fade-up">
+            
+            <!-- A. Account Settings Panel Tab -->
+            <div id="tab-section-account" class="tab-target-panel">
+                <h2 style="font-size:1.3rem; margin-bottom:24px; color:var(--secondary);">Paramètres du Compte</h2>
+                <form id="profile-details-form">
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+                        <div class="form-group">
+                            <label class="form-label" for="prof-prenom">Prénom</label>
+                            <input type="text" id="prof-prenom" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="prof-nom">Nom</label>
+                            <input type="text" id="prof-nom" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="prof-email">Adresse Email</label>
+                        <input type="email" id="prof-email" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="prof-tel">Téléphone</label>
+                        <input type="tel" id="prof-tel" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="prof-pass">Nouveau mot de passe (laisser vide pour inchangé)</label>
+                        <input type="password" id="prof-pass" class="form-control" placeholder="••••••••">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="margin-top:20px; height:48px;">Sauvegarder les modifications</button>
+                </form>
+            </div>
+
+            <!-- B. My Ads Panel Tab -->
+            <div id="tab-section-ads" class="tab-target-panel" style="display:none;">
+                <h2 style="font-size:1.3rem; margin-bottom:24px; color:var(--secondary);">Gestion de mes annonces</h2>
+                <div id="my-profile-ads-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:20px;"></div>
+            </div>
+
+            <!-- C. Private Live messages panel -->
+            <div id="tab-section-chat" class="tab-target-panel" style="display:none;">
+                <h2 style="font-size:1.3rem; margin-bottom:24px; color:var(--secondary);">Messagerie Privée</h2>
+                
+                <div class="chat-app-box">
+                    <!-- Conversations list column left -->
+                    <div class="chat-contacts-col" id="chat-contacts-target"></div>
+                    
+                    <!-- Viewport thread display right -->
+                    <div class="chat-viewport-col">
+                        <div class="chat-history-viewport" id="chat-conversation-thread">
+                            <div style="margin: auto; text-align:center; color:var(--text-muted);">
+                                <span class="material-icons" style="font-size:48px;">chat_bubble_outline</span>
+                                <div>Sélectionnez une discussion pour commencer à discuter</div>
+                            </div>
+                        </div>
+
+                        <div class="chat-input-row" id="chat-entry-box" style="display:none;">
+                            <input type="text" id="chat-text-input" class="form-control" placeholder="Votre message...">
+                            <button id="chat-send-btn" class="btn btn-primary">
+                                <span class="material-icons">send</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Core Javascript Codes load -->
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/annonces.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Guard auth
+            Auth.requireAuth();
+
+            const user = Auth.getCurrentUser();
+            
+            // Populate sidebar
+            document.getElementById('sidebar-user-avatar').innerText = user.prenom.charAt(0).toUpperCase();
+            document.getElementById('sidebar-user-name').innerText = `${user.prenom} ${user.nom}`;
+            document.getElementById('sidebar-user-email').innerText = user.email;
+
+            // Prefill Profile form settings
+            document.getElementById('prof-prenom').value = user.prenom;
+            document.getElementById('prof-nom').value = user.nom;
+            document.getElementById('prof-email').value = user.email;
+            document.getElementById('prof-tel').value = user.telephone;
+
+            // Tab toggling links logic
+            const sidebarTabs = document.querySelectorAll('.profile-menu-item');
+            sidebarTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    sidebarTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    const target = tab.getAttribute('data-tab');
+                    document.querySelectorAll('.tab-target-panel').forEach(p => p.style.display = 'none');
+                    document.getElementById(`tab-section-${target}`).style.display = 'block';
+
+                    if (target === 'ads') loadUserPublishings();
+                    if (target === 'chat') loadUserMessages();
+                });
+            });
+
+            // Redirect to appropriate tab from URL param
+            const urlParams = new URLSearchParams(window.location.search);
+            const tabParam = urlParams.get('tab');
+            if (tabParam) {
+                const tabEl = document.querySelector(`.profile-menu-item[data-tab="${tabParam}"]`);
+                if (tabEl) tabEl.click();
+            }
+
+            // Save Account modifications
+            const profileForm = document.getElementById('profile-details-form');
+            profileForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const updates = {
+                    prenom: document.getElementById('prof-prenom').value.trim(),
+                    nom: document.getElementById('prof-nom').value.trim(),
+                    email: document.getElementById('prof-email').value.trim(),
+                    telephone: document.getElementById('prof-tel').value.trim(),
+                };
+
+                const newPass = document.getElementById('prof-pass').value;
+                if (newPass) updates.mot_de_passe = newPass;
+
+                const res = await API.call('modifierUtilisateur', { id: user.id, role: user.role, updates });
+                if (res.success) {
+                    alert("Compte mis à jour !");
+                    // Sync session cache
+                    localStorage.setItem(CONFIG.STORAGE_PREFIX + "session", JSON.stringify({ ...user, ...updates }));
+                    window.location.reload();
+                } else {
+                    alert(res.error);
+                }
+            });
+
+            // LOAD Tab Part B: User Listings
+            async function loadUserPublishings() {
+                const adsContainer = document.getElementById('my-profile-ads-grid');
+                adsContainer.innerHTML = '<div style="grid-column:1/-1; text-align:center;">Chargement...</div>';
+
+                const results = await API.call('getAnnonces', { includeInactive: true });
+                if (results.success) {
+                    // Filter matching ads belonging to user
+                    const myAds = results.data.filter(a => a.utilisateur_id == user.id);
+                    adsContainer.innerHTML = '';
+
+                    if (myAds.length === 0) {
+                        adsContainer.innerHTML = `<div style="grid-column: 1/-1; text-align:center; color:var(--text-muted); padding:32px;">Aucun dépôt d'annonce effectué.</div>`;
+                        return;
+                    }
+
+                    myAds.forEach(ad => {
+                        const card = document.createElement('div');
+                        card.className = 'card';
+                        card.style.background = 'var(--surface)';
+                        card.style.border = '1px solid var(--border)';
+                        card.style.borderRadius = 'var(--radius-md)';
+                        card.style.overflow = 'hidden';
+                        card.style.position = 'relative';
+
+                        const imgUrl = ad.images[0] || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200" fill="%23eee"></svg>';
+                        const statusClass = ad.statut === 'valide' ? 'badge-success' : 'badge-danger';
+
+                        card.innerHTML = `
+                            <div style="aspect-ratio:16/9; overflow:hidden;">
+                                <img src="${imgUrl}" style="width:100%; height:100%; object-fit:cover;">
+                            </div>
+                            <div style="padding:12px;">
+                                <h4 style="font-size:0.85rem; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${ad.titre}</h4>
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+                                    <span class="badge ${statusClass}">${ad.statut.toUpperCase()}</span>
+                                    <button class="btn-delete-ad" data-id="${ad.id}" style="border:none; background:transparent; color:var(--error); cursor:pointer;"><span class="material-icons" style="font-size:18px;">delete</span></button>
+                                </div>
+                            </div>
+                        `;
+
+                        card.querySelector('.btn-delete-ad').addEventListener('click', async (e) => {
+                            e.preventDefault();
+                            if (confirm("Voulez-vous supprimer définitivement cette annonce ?")) {
+                                const delRes = await API.call('supprimerAnnonce', { id: ad.id, utilisateur_id: user.id });
+                                if (delRes.success) {
+                                    loadUserPublishings();
+                                } else {
+                                    alert(delRes.error);
+                                }
+                            }
+                        });
+
+                        adsContainer.appendChild(card);
+                    });
+                }
+            }
+
+            // LOAD Tab Part C: Messagerie Live chats
+            let activeContactId = null;
+            let activeAdId = null;
+            let chatPoller = null;
+
+            async function loadUserMessages() {
+                const contactsBox = document.getElementById('chat-contacts-target');
+                contactsBox.innerHTML = '<div style="padding:16px; text-align:center;">...</div>';
+
+                const msgResults = await API.call('getMessages', { utilisateur_id: user.id });
+                if (msgResults.success) {
+                    const messages = msgResults.data;
+                    const threadedContacts = {};
+
+                    // Reduce messages into unique contact+ad keys
+                    messages.forEach(m => {
+                        const otherId = m.expediteur_id == user.id ? m.destinataire_id : m.expediteur_id;
+                        const key = `${otherId}-${m.annonce_id}`;
+                        if (!threadedContacts[key]) {
+                            threadedContacts[key] = {
+                                otherId,
+                                adId: m.annonce_id,
+                                latestMsg: m,
+                                count: 1
+                            };
+                        } else {
+                            if (new Date(m.date_envoi) > new Date(threadedContacts[key].latestMsg.date_envoi)) {
+                                threadedContacts[key].latestMsg = m;
+                            }
+                            threadedContacts[key].count++;
+                        }
+                    });
+
+                    contactsBox.innerHTML = '';
+                    const contactKeys = Object.keys(threadedContacts);
+                    
+                    if (contactKeys.length === 0) {
+                        contactsBox.innerHTML = '<div style="padding:20px; text-align:center; color:var(--text-muted); font-size:0.85rem;">Aucune conversation</div>';
+                        return;
+                    }
+
+                    // Loop dynamic listings card row contacts list
+                    for (const key of contactKeys) {
+                        const context = threadedContacts[key];
+                        // Fetch other user name
+                        const usersListResult = await API.call('getAdminUsers', { role: 'admin' }); // Hack, emulator fetches all matching
+                        const otherUser = usersListResult.success ? usersListResult.data.find(u => u.id == context.otherId) : null;
+                        const otherName = otherUser ? `${otherUser.prenom} ${otherUser.nom}` : `Acheteur #${context.otherId}`;
+                        
+                        const row = document.createElement('div');
+                        row.className = `chat-contact-row ${activeContactId === context.otherId && activeAdId === context.adId ? 'active' : ''}`;
+                        row.innerHTML = `
+                            <div style="font-weight:700; font-size:0.85rem; color:var(--secondary);">${otherName}</div>
+                            <div style="font-size:0.7rem; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:4px;">${context.latestMsg.message}</div>
+                        `;
+
+                        row.addEventListener('click', () => {
+                            document.querySelectorAll('.chat-contact-row').forEach(r => r.classList.remove('active'));
+                            row.classList.add('active');
+                            openConversation(context.otherId, context.adId);
+                        });
+
+                        contactsBox.appendChild(row);
+                    }
+                }
+            }
+
+            // Fetch chat history of selected conversation
+            async function openConversation(otherId, adId) {
+                activeContactId = otherId;
+                activeAdId = adId;
+
+                const threadViewport = document.getElementById('chat-conversation-thread');
+                const entryBox = document.getElementById('chat-entry-box');
+                
+                threadViewport.innerHTML = '<div style="margin:auto;">Chargement de la discussion...</div>';
+                entryBox.style.display = 'flex';
+
+                // Fetch details
+                const fetchConvoHistory = async () => {
+                    const msgResults = await API.call('getMessages', { utilisateur_id: user.id });
+                    if (msgResults.success && activeContactId === otherId && activeAdId === adId) {
+                        // Filter matching messages
+                        const filtered = msgResults.data.filter(m => 
+                            (m.expediteur_id == user.id && m.destinataire_id == otherId && m.annonce_id == adId) ||
+                            (m.expediteur_id == otherId && m.destinataire_id == user.id && m.annonce_id == adId)
+                        );
+
+                        threadViewport.innerHTML = '';
+                        filtered.forEach(m => {
+                            const chatBubble = document.createElement('div');
+                            chatBubble.className = `chat-bubble ${m.expediteur_id == user.id ? 'sent' : 'received'}`;
+                            chatBubble.innerText = m.message;
+                            threadViewport.appendChild(chatBubble);
+                        });
+                        
+                        // Scroll to bottom
+                        threadViewport.scrollTop = threadViewport.scrollHeight;
+                    }
+                };
+
+                await fetchConvoHistory();
+
+                // Setup live simulated socket/polling
+                if (chatPoller) clearInterval(chatPoller);
+                chatPoller = setInterval(fetchConvoHistory, 3000);
+            }
+
+            // Send message inside conversation
+            const sendBtn = document.getElementById('chat-send-btn');
+            const chatInput = document.getElementById('chat-text-input');
+
+            const sendMsgAction = async () => {
+                const text = chatInput.value.trim();
+                if (!text || !activeContactId || !activeAdId) return;
+
+                const res = await API.call('envoyerMessage', {
+                    expediteur_id: user.id,
+                    destinataire_id: activeContactId,
+                    annonce_id: activeAdId,
+                    message: text
+                });
+
+                if (res.success) {
+                    chatInput.value = '';
+                    // Append bubble instantly
+                    const threadViewport = document.getElementById('chat-conversation-thread');
+                    const bubble = document.createElement('div');
+                    bubble.className = 'chat-bubble sent';
+                    bubble.innerText = text;
+                    threadViewport.appendChild(bubble);
+                    threadViewport.scrollTop = threadViewport.scrollHeight;
+                }
+            };
+
+            sendBtn.addEventListener('click', sendMsgAction);
+            chatInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') sendMsgAction();
+            });
+
+            // Prevent memory leaks on tab navigate
+            window.addEventListener('beforeunload', () => {
+                if (chatPoller) clearInterval(chatPoller);
+            });
+        });
+    </script>
+</body>
+</html>

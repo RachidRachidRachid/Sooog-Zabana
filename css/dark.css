@@ -1,0 +1,91 @@
+/* Premium Dark Mode Overrides */
+body.dark-mode {
+    --bg-hsl: 222, 47%, 7%;
+    --bg: hsl(var(--bg-hsl));
+    
+    --surface-hsl: 222, 47%, 10%;
+    --surface: hsl(var(--surface-hsl));
+    
+    --text-hsl: 210, 40%, 98%;
+    --text: hsl(var(--text-hsl));
+    
+    --text-muted-hsl: 215, 16%, 65%;
+    --text-muted: hsl(var(--text-muted-hsl));
+    
+    --border-hsl: 222, 47%, 16%;
+    --border: hsl(var(--border-hsl));
+    
+    --glass-bg: rgba(15, 23, 42, 0.85);
+    --glass-border: rgba(30, 41, 59, 0.5);
+    
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 8px 30px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.5);
+    --shadow-premium: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* Specific Dark Mode Overrides */
+body.dark-mode .btn-outline {
+    border-color: var(--border);
+    color: var(--text);
+}
+
+body.dark-mode .btn-outline:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+body.dark-mode .profile-pill {
+    background: var(--surface);
+    border-color: var(--border);
+}
+
+body.dark-mode .profile-pill:hover {
+    background: rgba(255, 111, 0, 0.1);
+    border-color: var(--primary);
+}
+
+body.dark-mode .modal-footer {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .card,
+body.dark-mode .dashboard-card,
+body.dark-mode .admin-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+}
+
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
+    background: var(--surface);
+    border-color: var(--border);
+    color: var(--text);
+}
+
+body.dark-mode input:focus,
+body.dark-mode select:focus,
+body.dark-mode textarea:focus {
+    border-color: var(--primary);
+}
+/* Adjust charts and icons for readability */
+body.dark-mode .social-icon {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+body.dark-mode .dropdown-menu {
+    background: var(--surface);
+    border-color: var(--border);
+    box-shadow: var(--shadow-lg);
+}
+
+body.dark-mode .mobile-menu-drawer {
+    background: var(--surface);
+    border-color: var(--border);
+}
+body.dark-mode ::-webkit-scrollbar-thumb {
+    background: hsl(var(--secondary-hue), var(--secondary-sat), 30%);
+}
+body.dark-mode ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary-hue), var(--primary-sat), 40%);
+}

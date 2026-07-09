@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - SOOG ZABANA</title>
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dark.css">
+    <link rel="stylesheet" href="css/animation.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <style>
+        .auth-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 150px);
+            padding: 40px 24px;
+        }
+        .auth-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 440px;
+            padding: 40px;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+        }
+        .auth-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            text-align: center;
+            color: var(--secondary);
+        }
+        .auth-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 32px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section (Dynamic) -->
+    <header></header>
+
+    <main class="container auth-wrapper">
+        <div class="auth-card animate-fade-up">
+            <h1 class="auth-title">Ravi de vous revoir !</h1>
+            <p class="auth-subtitle">Accédez à votre espace سوق زبّانة SOGE ZABANA</p>
+            
+            <!-- Error Banner Message -->
+            <div id="auth-error-banner" style="display:none; padding:12px 16px; background:rgba(239, 68, 68, 0.1); border:1px solid var(--error); color:var(--error); border-radius:var(--radius-sm); margin-bottom:20px; font-weight:600; font-size: 0.9rem;"></div>
+
+            <form id="login-form">
+                <!-- Email field -->
+                <div class="form-group">
+                    <label class="form-label" for="login-email">Adresse Email</label>
+                    <div class="form-control-icon-wrapper">
+                        <span class="material-icons form-icon">mail_outline</span>
+                        <input type="email" id="login-email" class="form-control" placeholder="exemple@mail.com" required>
+                    </div>
+                </div>
+
+                <!-- Password field -->
+                <div class="form-group">
+                    <label class="form-label" for="login-password">Mot de passe</label>
+                    <div class="form-control-icon-wrapper">
+                        <span class="material-icons form-icon">lock_outline</span>
+                        <input type="password" id="login-password" class="form-control" placeholder="••••••••" required>
+                    </div>
+                    <div style="text-align: right; margin-top: 4px;">
+                        <a href="#" style="font-size: 0.8rem; color:var(--primary); font-weight:500;">Mot de passe oublié ?</a>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top:24px;">
+                    <button type="submit" id="login-submit-btn" class="btn btn-primary" style="width:100%; height:48px;">
+                        Se Connecter
+                    </button>
+                </div>
+            </form>
+
+            <div style="text-align:center; margin-top:24px; font-size:0.9rem; color:var(--text-muted);">
+                Pas encore membre ? <a href="register.html" style="color:var(--primary); font-weight:700;">Créer un compte</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Core Javascript Codes load -->
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if user is already signed in
+            if (Auth.isAuthenticated()) {
+                window.location.href = "index.html";
+            }
+
+            const form = document.getElementById('login-form');
+            const submitBtn = document.getElementById('login-submit-btn');
+            const errBanner = document.getElementById('auth-error-banner');
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                errBanner.style.display = 'none';
+
+                const email = document.getElementById('login-email').value.trim();
+                const pass = document.getElementById('login-password').value;
+
+                submitBtn.disabled = true;
+                submitBtn.innerText = "Connexion...";
+
+                const res = await Auth.login(email, pass);
+
+                if (res.success) {
+                    // Extract redirect URL parameters if exists
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const redirect = urlParams.get('redirect');
+                    window.location.href = redirect ? decodeURIComponent(redirect) : "index.html";
+                } else {
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "Se Connecter";
+                    errBanner.innerText = res.error || "Une erreur est survenue lors de la connexion.";
+                    errBanner.style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - SOOG ZABANA</title>
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dark.css">
+    <link rel="stylesheet" href="css/animation.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <style>
+        .auth-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 150px);
+            padding: 40px 24px;
+        }
+        .auth-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 480px;
+            padding: 40px;
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+        }
+        .auth-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            text-align: center;
+            color: var(--secondary);
+        }
+        .auth-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 32px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section (Dynamic) -->
+    <header></header>
+
+    <main class="container auth-wrapper">
+        <div class="auth-card animate-fade-up">
+            <h1 class="auth-title">Créer un compte</h1>
+            <p class="auth-subtitle">Rejoignez سوق زبّانة SOGE ZABANA, le marché moderne gratuit</p>
+            
+            <!-- Error Banner Message -->
+            <div id="auth-error-banner" style="display:none; padding:12px 16px; background:rgba(239, 68, 68, 0.1); border:1px solid var(--error); color:var(--error); border-radius:var(--radius-sm); margin-bottom:20px; font-weight:600; font-size: 0.9rem;"></div>
+
+            <form id="register-form">
+                <!-- Names flex side by side -->
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+                    <div class="form-group">
+                        <label class="form-label" for="reg-prenom">Prénom</label>
+                        <input type="text" id="reg-prenom" class="form-control" placeholder="Karim" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="reg-nom">Nom</label>
+                        <input type="text" id="reg-nom" class="form-control" placeholder="Mellah" required>
+                    </div>
+                </div>
+
+                <!-- Email field -->
+                <div class="form-group">
+                    <label class="form-label" for="reg-email">Adresse Email</label>
+                    <div class="form-control-icon-wrapper">
+                        <span class="material-icons form-icon">mail_outline</span>
+                        <input type="email" id="reg-email" class="form-control" placeholder="exemple@mail.com" required>
+                    </div>
+                </div>
+
+                <!-- Telephone contact -->
+                <div class="form-group">
+                    <label class="form-label" for="reg-tel">Numéro de Téléphone</label>
+                    <div class="form-control-icon-wrapper">
+                        <span class="material-icons form-icon">phone</span>
+                        <input type="tel" id="reg-tel" class="form-control" placeholder="0550112233" required>
+                    </div>
+                </div>
+
+                <!-- Password field -->
+                <div class="form-group">
+                    <label class="form-label" for="reg-password">Mot de passe</label>
+                    <div class="form-control-icon-wrapper">
+                        <span class="material-icons form-icon">lock_outline</span>
+                        <input type="password" id="reg-password" class="form-control" placeholder="Min. 6 caractères" required>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top:28px;">
+                    <button type="submit" id="reg-submit-btn" class="btn btn-primary" style="width:100%; height:48px;">
+                        Créer mon Compte
+                    </button>
+                </div>
+            </form>
+
+            <div style="text-align:center; margin-top:24px; font-size:0.9rem; color:var(--text-muted);">
+                Déjà membre ? <a href="login.html" style="color:var(--primary); font-weight:700;">Se connecter</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Core Javascript Codes load -->
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Guard
+            if (Auth.isAuthenticated()) {
+                window.location.href = "index.html";
+            }
+
+            const form = document.getElementById('register-form');
+            const submitBtn = document.getElementById('reg-submit-btn');
+            const errBanner = document.getElementById('auth-error-banner');
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                errBanner.style.display = 'none';
+
+                const nom = document.getElementById('reg-nom').value.trim();
+                const prenom = document.getElementById('reg-prenom').value.trim();
+                const email = document.getElementById('reg-email').value.trim();
+                const tel = document.getElementById('reg-tel').value.trim();
+                const pass = document.getElementById('reg-password').value;
+
+                submitBtn.disabled = true;
+                submitBtn.innerText = "Création du compte...";
+
+                const res = await Auth.register(nom, prenom, email, tel, pass);
+
+                if (res.success) {
+                    alert("Compte créé avec succès ! Connectez-vous avec vos identifiants.");
+                    window.location.href = "login.html";
+                } else {
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "Créer mon Compte";
+                    errBanner.innerText = res.error || "Une erreur est survenue lors de la création du compte.";
+                    errBanner.style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

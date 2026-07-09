@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Favoris - SOOG ZABANA</title>
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dark.css">
+    <link rel="stylesheet" href="css/animation.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+    <!-- Header Section (Dynamic) -->
+    <header></header>
+
+    <main class="container" style="margin: 40px auto 80px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:32px;">
+            <h1 style="font-size:1.8rem; color:var(--secondary); font-weight:800;">Mes Annonces Favorites</h1>
+            <a href="index.html" class="btn btn-outline">
+                <span class="material-icons">search</span> Continuer mes recherches
+            </a>
+        </div>
+
+        <!-- Target Grid listings -->
+        <div id="favorites-listings-target" style="min-height:300px;">
+            <div style="text-align:center; padding:100px 0; color:var(--text-muted);">
+                <span class="material-icons" style="font-size:40px; animation:spin 1.5s infinite linear;">sync</span>
+                <br>Chargement de vos favoris...
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer page block -->
+    <footer>
+        <div class="container footer-grid">
+            <div class="footer-about">
+                <a href="#" class="logo-link" style="color:white; font-size:1.8rem; font-weight:800;">
+                    SOGE <span class="highlight">ZABANA</span>
+                </a>
+                <p>Le marché national 100% digital pour acheter et vendre en toute sécurité et simplicité dans toute l'Algérie.</p>
+            </div>
+            <div>
+                <h3 class="footer-title">Liens Utiles</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="publier.html">Déposer une Annonce</a></li>
+                    <li><a href="favoris.html">Mes Favoris</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="footer-title">Catégories</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html?category=2">Véhicules</a></li>
+                    <li><a href="index.html?category=3">Immobilier</a></li>
+                    <li><a href="index.html?category=1">Hautes Technologies</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="footer-title">Nous Contacter</h3>
+                <ul class="footer-links">
+                    <li><a href="mailto:support@soog.dz">support@soog.dz</a></li>
+                    <li><a href="tel:0550112233">+213 (0) 550 11 22 33</a></li>
+                    <li><a href="#">Oran, Algérie</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            <span>&copy; 2026 SOGE ZABANA. Tous droits réservés.</span>
+            <div class="social-links">
+                <a href="#" class="social-icon"><span class="material-icons" style="font-size: 20px;">facebook</span></a>
+                <a href="#" class="social-icon"><span class="material-icons" style="font-size: 20px;">send</span></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Core Javascript Codes load -->
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/annonces.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Guard
+            Auth.requireAuth();
+
+            const user = Auth.getCurrentUser();
+            const res = await API.call('getFavoris', { utilisateur_id: user.id });
+
+            if (res.success) {
+                if (res.data.length === 0) {
+                    document.getElementById('favorites-listings-target').innerHTML = `
+                        <div style="text-align: center; padding: 64px 24px; background: var(--surface); border:1px solid var(--border); border-radius: var(--radius-lg);">
+                            <span class="material-icons" style="font-size:56px; color:var(--text-muted); margin-bottom:16px;">favorite_border</span>
+                            <h3 style="color:var(--secondary); font-size:1.2rem; margin-bottom:8px;">Aucun favori enregistré</h3>
+                            <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:24px; max-width:400px; margin-left:auto; margin-right:auto;">Cliquez sur l'icône de cœur sur les fiches d'annonces de notre catalogue pour les retrouver ici à tout moment.</p>
+                            <a href="index.html" class="btn btn-primary">Parcourir les annonces</a>
+                        </div>
+                    `;
+                } else {
+                    Annonces.renderGrid('favorites-listings-target', res.data);
+                }
+            } else {
+                alert("Une erreur s'est produite lors de la récupération des favoris.");
+            }
+        });
+    </script>
+</body>
+</html>

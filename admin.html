@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration Console - SOOG ZABANA</title>
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dark.css">
+    <link rel="stylesheet" href="css/animation.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+    <div class="admin-layout">
+        <!-- Dashboard Navigation Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="admin-logo-wrapper">
+                <span class="material-icons" style="font-size: 28px; color: var(--primary);">admin_panel_settings</span>
+                <span class="admin-logo-text">SOGE <span>ZABANA</span></span>
+            </div>
+            
+            <ul class="admin-menu">
+                <li class="admin-menu-item active">
+                    <a href="#" data-tab="dashboard">
+                        <span class="material-icons">dashboard</span> Tableau de Bord
+                    </a>
+                </li>
+                <li class="admin-menu-item">
+                    <a href="#" data-tab="annonces">
+                        <span class="material-icons">collections</span> Annonces
+                    </a>
+                </li>
+                <li class="admin-menu-item">
+                    <a href="#" data-tab="users">
+                        <span class="material-icons">people</span> Utilisateurs
+                    </a>
+                </li>
+                <li class="admin-menu-item">
+                    <a href="#" data-tab="settings">
+                        <span class="material-icons">settings</span> Paramètres
+                    </a>
+                </li>
+            </ul>
+
+            <div style="margin-top:auto; padding:0 12px;">
+                <a href="index.html" class="btn btn-outline" style="width:100%; border-color:rgba(255,255,255,0.2); color:white;">
+                    <span class="material-icons">arrow_back</span> Retour au site
+                </a>
+            </div>
+        </aside>
+
+        <!-- Working Area -->
+        <main class="admin-main">
+            <!-- Header bar -->
+            <div class="admin-header">
+                <span class="admin-header-title">Console de Contrôle</span>
+                <div style="display:flex; align-items:center; gap:20px;">
+                    <div style="font-weight:700; color:var(--secondary);" id="admin-user-pilla">Admin SOGE</div>
+                </div>
+            </div>
+
+            <!-- Content Area Sheets -->
+            <div class="admin-content">
+
+                <!-- 1. SECTION: DASHBOARD SHEETS -->
+                <div id="admin-section-dashboard" class="admin-section">
+                    <!-- KPI Cards Grid -->
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="kpi-details">
+                                <h3>Total Annonces</h3>
+                                <div class="kpi-value" id="kpi-ads-val">0</div>
+                                <span class="kpi-trend up"><span class="material-icons" style="font-size:12px;">trending_up</span> +15% ce mois</span>
+                            </div>
+                            <div class="kpi-icon"><span class="material-icons">collections</span></div>
+                        </div>
+
+                        <div class="kpi-card">
+                            <div class="kpi-details">
+                                <h3>Utilisateurs</h3>
+                                <div class="kpi-value" id="kpi-users-val">0</div>
+                                <span class="kpi-trend up"><span class="material-icons" style="font-size:12px;">trending_up</span> +8% ce mois</span>
+                            </div>
+                            <div class="kpi-icon blue"><span class="material-icons">people</span></div>
+                        </div>
+
+                        <div class="kpi-card">
+                            <div class="kpi-details">
+                                <h3>Visites cumulées</h3>
+                                <div class="kpi-value" id="kpi-views-val">0</div>
+                                <span class="kpi-trend up"><span class="material-icons" style="font-size:12px;">trending_up</span> +22% ce mois</span>
+                            </div>
+                            <div class="kpi-icon green"><span class="material-icons">visibility</span></div>
+                        </div>
+
+                        <div class="kpi-card">
+                            <div class="kpi-details">
+                                <h3>Signalements</h3>
+                                <div class="kpi-value" id="kpi-reports-val">0</div>
+                                <span class="kpi-trend down"><span class="material-icons" style="font-size:12px;">trending_down</span> -5% ce mois</span>
+                            </div>
+                            <div class="kpi-icon purple"><span class="material-icons">report</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Double Segment Charts -->
+                    <div class="stats-segment">
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3 style="font-size:1.05rem;">Visites Quotidiens</h3>
+                                <span class="badge badge-primary">7 derniers jours</span>
+                            </div>
+                            <div id="visites-chart-slot" style="height: 240px; display:flex; align-items:center; justify-content:center;"></div>
+                        </div>
+
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3 style="font-size:1.05rem;">Annonces Créées</h3>
+                                <span class="badge badge-success">7 derniers jours</span>
+                            </div>
+                            <div id="annonces-chart-slot" style="height: 240px; display:flex; align-items:center; justify-content:center;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Audit logs database -->
+                    <div class="table-card">
+                        <div class="table-header-bar">
+                            <h3 style="font-size:1.05rem;">Historique d'activité système</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Action</th>
+                                        <th>Détails</th>
+                                        <th>Date et heure</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-audit-logs-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. SECTION: ANNUNCIATIONS MODERATION SHEETS -->
+                <div id="admin-section-annonces" class="admin-section" style="display:none;">
+                    <div class="table-card">
+                        <div class="table-header-bar">
+                            <h3 style="font-size:1.05rem;">Gestion des annonces</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Réf ID</th>
+                                        <th>Détails de l'annonce</th>
+                                        <th>Prix</th>
+                                        <th>Statut</th>
+                                        <th>Créé Le</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-annonces-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. SECTION: USERS CONTROL SHEETS -->
+                <div id="admin-section-users" class="admin-section" style="display:none;">
+                    <div class="table-card">
+                        <div class="table-header-bar">
+                            <h3 style="font-size:1.05rem;">Utilisateurs enregistrés</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Utilisateur ID</th>
+                                        <th>Membre</th>
+                                        <th>Téléphone</th>
+                                        <th>Rôle</th>
+                                        <th>État</th>
+                                        <th>Privilèges / État</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-users-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. SECTION: SETTINGS SHEETS -->
+                <div id="admin-section-settings" class="admin-section" style="display:none;">
+                    <div class="table-card" style="padding:32px;">
+                        <h3 style="font-size:1.15rem; margin-bottom:24px; color:var(--secondary);">Paramètres Généraux de l'Application</h3>
+                        
+                        <form id="admin-settings-form"></form>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Core Javascript Codes load -->
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Guard
+            Auth.requireAdmin();
+
+            const user = Auth.getCurrentUser();
+            document.getElementById('admin-user-pilla').innerText = `${user.prenom} ${user.nom}`;
+
+            // Boot admin panel
+            Admin.init();
+        });
+    </script>
+</body>
+</html>

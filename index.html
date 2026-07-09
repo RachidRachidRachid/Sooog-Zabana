@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOOG ZABANA - Le Marché Algérien Moderne</title>
+    <meta name="description" content="Plateforme d'annonces gratuites en Algérie. Auto, Immobilier, Téléphones, Informatique et plus. Simple, rapide et 100% gratuit.">
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/theme.css" id="theme-link"> <!-- Backup spacer -->
+    <link rel="stylesheet" href="css/dark.css">
+    <link rel="stylesheet" href="css/animation.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <style>
+        /* Specific homepage styles */
+        .hero-banner {
+            background: linear-gradient(135deg, var(--secondary) 0%, hsl(var(--secondary-hue), var(--secondary-sat), 18%) 100%);
+            padding: 72px 0;
+            color: white;
+            text-align: center;
+            border-bottom: 4px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 80% 20%, rgba(255, 111, 0, 0.15) 0%, transparent 50%);
+        }
+        .hero-container {
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .hero-title {
+            color: white;
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 32px;
+            font-weight: 400;
+        }
+        .search-container-box {
+            background: var(--surface);
+            padding: 16px;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .search-box-field {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+        body.dark-mode .search-container-box {
+            background: var(--surface);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+        }
+        .categories-panel {
+            padding: 48px 0 24px;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+        .main-catalog-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 32px;
+            margin-bottom: 64px;
+        }
+        .filter-sidebar {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            height: fit-content;
+            box-shadow: var(--shadow-sm);
+        }
+        @media(max-width: 900px) {
+            .main-catalog-layout {
+                grid-template-columns: 1fr;
+            }
+            .filter-sidebar {
+                display: none; /* Can be toggled on mobile */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section (Dynamic) -->
+    <header></header>
+
+    <!-- Hero Banner Search Desk -->
+    <section class="hero-banner">
+        <div class="container hero-container">
+            <h1 class="hero-title" data-i18n="appName">SOOG ZABANA</h1>
+            <p class="hero-subtitle" data-i18n="tagline">Le Marché Algérien Moderne</p>
+            
+            <div class="search-container-box">
+                <div class="search-box-field">
+                    <div class="search-input-wrapper">
+                        <span class="material-icons search-icon">search</span>
+                        <input type="text" id="home-search-input" data-i18n="searchPlaceholder" placeholder="Que recherchez-vous aujourd'hui ?" style="height: 52px; border-radius:var(--radius-lg);">
+                    </div>
+                    <div id="home-search-suggestions"></div>
+                </div>
+                
+                <button type="button" id="home-submit-search" class="btn btn-primary" style="height: 52px; padding: 0 32px; border-radius: var(--radius-lg);">
+                    <span class="material-icons">search</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Navigation segment -->
+    <section class="container categories-panel">
+        <div class="section-header">
+            <h2 style="font-size: 1.3rem;" data-i18n="allCategories">Toutes les catégories</h2>
+        </div>
+        <div id="categories-grid-container"></div>
+    </section>
+
+    <!-- Main listings catalog and filters -->
+    <main class="container">
+        <div class="main-catalog-layout">
+            
+            <!-- Sidebar filters panel -->
+            <aside class="filter-sidebar">
+                <h3 style="font-size: 1.1rem; margin-bottom: 20px; display:flex; align-items:center; gap:8px;" data-i18n="filters">
+                    <span class="material-icons" style="color:var(--primary);">tune</span> Filtres
+                </h3>
+                
+                <form id="filter-sidebar-form">
+                    <!-- Wilayas Cascade select -->
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="region">Wilaya</label>
+                        <select id="filter-wilaya" class="form-control"></select>
+                    </div>
+
+                    <!-- Communes select -->
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="commune">Commune</label>
+                        <select id="filter-commune" class="form-control" disabled>
+                            <option value="">Toutes les Communes</option>
+                        </select>
+                    </div>
+
+                    <!-- Categories list filter -->
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="category">Catégorie</label>
+                        <select id="filter-category" class="form-control">
+                            <option value="">Toutes les catégories</option>
+                        </select>
+                    </div>
+
+                    <!-- Price selection -->
+                    <div class="form-group">
+                        <label class="form-label" data-i18n="price">Prix</label>
+                        <div style="display:flex; gap:8px;">
+                            <input type="number" id="filter-price-min" class="form-control" data-i18n="minPrice" placeholder="Min">
+                            <input type="number" id="filter-price-max" class="form-control" data-i18n="maxPrice" placeholder="Max">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top:16px;" data-i18n="applyFilters">Appliquer</button>
+                    <button type="button" id="reset-filters-btn" class="btn btn-outline" style="width: 100%; margin-top:8px;">Réinitialiser</button>
+                </form>
+            </aside>
+
+            <!-- Cards listing block -->
+            <section>
+                <div class="section-header">
+                    <h2 style="font-size: 1.3rem;" data-i18n="recentAds">Annonces Récentes</h2>
+                    <span id="results-counter" style="font-size: 0.9rem; color:var(--text-muted); font-weight:500;">0 annonces trouvées</span>
+                </div>
+                <div id="listings-grid-container"></div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer page block -->
+    <footer>
+        <div class="container footer-grid">
+            <div class="footer-about">
+                <a href="#" class="logo-link" style="color:white; font-size:1.8rem; font-weight:800;">
+                    SOGE <span class="highlight">ZABANA</span>
+                </a>
+                <p>Le marché national 100% digital pour acheter et vendre en toute sécurité et simplicité dans toute l'Algérie.</p>
+            </div>
+            <div>
+                <h3 class="footer-title">Liens Utiles</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="publier.html">Déposer une Annonce</a></li>
+                    <li><a href="favoris.html">Mes Favoris</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="footer-title">Catégories</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html?category=2">Véhicules</a></li>
+                    <li><a href="index.html?category=3">Immobilier</a></li>
+                    <li><a href="index.html?category=1">Hautes Technologies</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="footer-title">Nous Contacter</h3>
+                <ul class="footer-links">
+                    <li><a href="mailto:support@soog.dz">support@soog.dz</a></li>
+                    <li><a href="tel:0550112233">+213 (0) 550 11 22 33</a></li>
+                    <li><a href="#">Oran, Algérie</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            <span>&copy; 2026 SOGE ZABANA. Tous droits réservés.</span>
+            <div class="social-links">
+                <a href="#" class="social-icon"><span class="material-icons" style="font-size: 20px;">facebook</span></a>
+                <a href="#" class="social-icon"><span class="material-icons" style="font-size: 20px;">send</span></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Core Javascript codes loaders -->
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/annonces.js"></script>
+    <script>
+        // Bind UI Event parameters
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Get URL params filters
+            const urlParams = new URLSearchParams(window.location.search);
+            const categoryFilter = urlParams.get('category');
+            const wilayaFilter = urlParams.get('wilaya');
+            const keywordFilter = urlParams.get('q');
+
+            // Setup Search Location Filters
+            Search.initLocationDropdowns('filter-wilaya', 'filter-commune');
+            Search.renderCategoryGrid('categories-grid-container');
+
+            // Bind autocomplete
+            Search.bindAutocomplete('home-search-input', 'home-search-suggestions');
+
+            // Populate categories values in selection categories filtering dropdown
+            const catSelect = document.getElementById('filter-category');
+            CONFIG.CATEGORIES.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c.id;
+                opt.innerText = c.name;
+                if (c.id == categoryFilter) opt.selected = true;
+                catSelect.appendChild(opt);
+            });
+
+            // Set other filter fields on query param detection
+            if (wilayaFilter) {
+                document.getElementById('filter-wilaya').value = wilayaFilter;
+                // Dispatch shift event to toggle cascades
+                document.getElementById('filter-wilaya').dispatchEvent(new Event('change'));
+            }
+
+            // Fetch listings list from Database
+            let fetchParams = {
+                categorie_id: categoryFilter,
+                region: wilayaFilter,
+                q: keywordFilter
+            };
+            
+            const results = await API.call('getAnnonces', fetchParams);
+            let ads = results.success ? results.data : [];
+
+            // Display counts and render tables
+            document.getElementById('results-counter').innerText = `${ads.length} annonce(s) trouvée(s)`;
+            Annonces.renderGrid('listings-grid-container', ads);
+
+            // Bind Home big search button submit
+            const submitBtn = document.getElementById('home-submit-search');
+            const bigInput = document.getElementById('home-search-input');
+            if (submitBtn && bigInput) {
+                submitBtn.addEventListener('click', () => {
+                    const val = bigInput.value.trim();
+                    window.location.href = `index.html?q=${encodeURIComponent(val)}`;
+                });
+                
+                // Allow enter key press inside field
+                bigInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        window.location.href = `index.html?q=${encodeURIComponent(bigInput.value.trim())}`;
+                    }
+                });
+            }
+
+            // Filter Sidebar Form Submit Action
+            const filterForm = document.getElementById('filter-sidebar-form');
+            filterForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const selCat = document.getElementById('filter-category').value;
+                const selWilaya = document.getElementById('filter-wilaya').value;
+                const selCommune = document.getElementById('filter-commune').value;
+                const minPrice = document.getElementById('filter-price-min').value;
+                const maxPrice = document.getElementById('filter-price-max').value;
+
+                // Process filters
+                let searchPayload = {
+                    categorie_id: selCat,
+                    region: selWilaya,
+                };
+                
+                const filterRes = await API.call('getAnnonces', searchPayload);
+                let filteredList = filterRes.success ? filterRes.data : [];
+
+                // Filter by local variables (price boundaries and commune matching)
+                if (selCommune) {
+                    filteredList = filteredList.filter(ad => ad.commune.toLowerCase() === selCommune.toLowerCase());
+                }
+                if (minPrice) {
+                    filteredList = filteredList.filter(ad => ad.prix >= parseFloat(minPrice));
+                }
+                if (maxPrice) {
+                    filteredList = filteredList.filter(ad => ad.prix <= parseFloat(maxPrice));
+                }
+
+                document.getElementById('results-counter').innerText = `${filteredList.length} annonce(s) trouvée(s)`;
+                Annonces.renderGrid('listings-grid-container', filteredList);
+            });
+
+            // Reset filters
+            document.getElementById('reset-filters-btn').addEventListener('click', () => {
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
+</body>
+</html>

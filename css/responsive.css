@@ -1,0 +1,149 @@
+/* Responsive Media Queries */
+
+/* Tablet Breakpoint (max-width: 1024px) */
+@media (max-width: 1024px) {
+    .footer-grid {
+        grid-template-columns: 1.5fr 1fr 1fr;
+        gap: 32px;
+    }
+    
+    .header-search {
+        margin: 0 16px;
+    }
+}
+
+/* Mobile Breakpoint (max-width: 768px) */
+@media (max-width: 768px) {
+    header {
+        height: 64px;
+    }
+    .header-container {
+        height: 64px;
+    }
+    
+    .header-search {
+        display: none; /* Hide header search, show toggle button to reveal it */
+    }
+
+    .header-search.mobile-visible {
+        display: block;
+        position: absolute;
+        top: 64px;
+        left: 0;
+        right: 0;
+        background: var(--surface);
+        padding: 12px 24px;
+        border-bottom: 1px solid var(--border);
+        margin: 0;
+        max-width: 100%;
+        box-shadow: var(--shadow-md);
+        z-index: 999;
+    }
+
+    .nav-actions {
+        gap: 8px;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .footer-about p {
+        max-width: 100%;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+
+    /* Mobile Quickbar Menu */
+    .mobile-menu-drawer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+        box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.05);
+        z-index: 1050;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .mobile-menu-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        color: var(--text-muted);
+        font-size: 0.7rem;
+        font-weight: 500;
+        text-decoration: none;
+        flex: 1;
+        text-align: center;
+    }
+
+    .mobile-menu-item.active {
+        color: var(--primary);
+    }
+
+    .mobile-menu-item span.icon {
+        font-size: 22px;
+    }
+
+    .mobile-fab-publish {
+        position: absolute;
+        top: -24px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: var(--primary);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 16px rgba(255, 111, 0, 0.4);
+        border: 4px solid var(--surface);
+    }
+    
+    .mobile-fab-publish span {
+        font-size: 24px;
+        color: white;
+    }
+    
+    body {
+        padding-bottom: 70px; /* Compensate for mobile quickbar */
+    }
+    
+    .btn {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+    
+    .logo-link {
+        font-size: 1.25rem;
+    }
+}
+
+/* Landscape Phones (max-width: 480px) */
+@media (max-width: 480px) {
+    .container {
+        padding: 0 16px;
+    }
+    
+    .profile-pill .profile-name {
+        display: none;
+    }
+    
+    .profile-pill {
+        padding: 4px;
+    }
+}

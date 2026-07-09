@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détail de l'annonce - SOOG ZABANA</title>
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/theme.css" id="theme-link">
+    <link rel="stylesheet" href="css/dark.css">
+    <link rel="stylesheet" href="css/animation.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <style>
+        .detail-wrapper {
+            margin: 40px auto 80px;
+        }
+        .detail-grid-layout {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 40px;
+        }
+        /* Mobile details layout adjustments */
+        @media(max-width: 900px) {
+            .detail-grid-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section (Dynamic) -->
+    <header></header>
+
+    <!-- Main Detail Content Card -->
+    <main class="container detail-wrapper">
+        <div id="detail-loading-skeleton" style="padding: 100px 0; text-align: center;">
+            <div class="pulse-loader" style="font-size: 1.2rem; font-weight:700; color:var(--text-muted);">
+                <span class="material-icons" style="font-size: 40px; vertical-align: middle; margin-bottom:8px; animation: spin 1s infinite linear;">sync</span>
+                <br>Chargement de l'annonce...
+            </div>
+        </div>
+
+        <div id="detail-listing-content" class="detail-grid-layout" style="display:none;"></div>
+    </main>
+
+    <!-- Footer page block -->
+    <footer>
+        <div class="container footer-grid">
+            <div class="footer-about">
+                <a href="#" class="logo-link" style="color:white; font-size:1.8rem; font-weight:800;">
+                    SOGE <span class="highlight">ZABANA</span>
+                </a>
+                <p>Le marché national 100% digital pour acheter et vendre en toute sécurité et simplicité dans toute l'Algérie.</p>
+            </div>
+            <div>
+                <h3 class="footer-title">Liens Utiles</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="publier.html">Déposer une Annonce</a></li>
+                    <li><a href="favoris.html">Mes Favoris</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="footer-title">Catégories</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html?category=2">Véhicules</a></li>
+                    <li><a href="index.html?category=3">Immobilier</a></li>
+                    <li><a href="index.html?category=1">Hautes Technologies</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="footer-title">Nous Contacter</h3>
+                <ul class="footer-links">
+                    <li><a href="mailto:support@soog.dz">support@soog.dz</a></li>
+                    <li><a href="tel:0550112233">+213 (0) 550 11 22 33</a></li>
+                    <li><a href="#">Oran, Algérie</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            <span>&copy; 2026 SOGE ZABANA. Tous droits réservés.</span>
+            <div class="social-links">
+                <a href="#" class="social-icon"><span class="material-icons" style="font-size: 20px;">facebook</span></a>
+                <a href="#" class="social-icon"><span class="material-icons" style="font-size: 20px;">send</span></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Core Javascript Codes load -->
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/annonces.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const adId = urlParams.get('id');
+
+            if (!adId) {
+                window.location.href = "index.html";
+                return;
+            }
+
+            const res = await API.call('getAnnonceById', { id: adId });
+            
+            const loader = document.getElementById('detail-loading-skeleton');
+            const content = document.getElementById('detail-listing-content');
+
+            if (res.success && res.data) {
+                loader.style.display = 'none';
+                content.style.display = 'grid';
+                
+                // Document Title
+                document.title = `${res.data.titre} - SOOG ZABANA`;
+                
+                Annonces.renderDetail('detail-listing-content', res.data);
+            } else {
+                loader.innerHTML = `
+                    <div style="padding: 48px; background:var(--surface); border:1px solid var(--border); border-radius: var(--radius-lg);">
+                        <span class="material-icons" style="font-size:48px; color:var(--error); margin-bottom:12px;">error_outline</span>
+                        <h3 style="color:var(--text); font-size:1.2rem; margin-bottom:8px;">Annonce introuvable ou archivée</h3>
+                        <p style="color:var(--text-muted); font-size: 0.95rem; margin-bottom:24px;">L'annonce recherchée a été désactivée ou supprimée par son annonceur.</p>
+                        <a href="index.html" class="btn btn-primary">Retour à la page d'accueil</a>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
