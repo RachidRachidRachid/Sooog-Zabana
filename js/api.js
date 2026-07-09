@@ -9,7 +9,7 @@ const API = {
                     method: 'POST',
                     mode: 'cors',
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'text/plain', // Bypasses the CORS preflight OPTIONS request blocked by Apps Script
                     },
                     body: JSON.stringify({ action, ...data })
                 });
